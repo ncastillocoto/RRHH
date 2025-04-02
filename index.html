@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconocimiento de Excelencia</title>
+    <style>
+        /* Fuentes */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+        
+        /* Estilos generales */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        /* Formulario moderno */
+        .form-container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .form-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #9e9e9e;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        
+        .generate-btn {
+            background-color: #FF6B35;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .generate-btn:hover {
+            background-color: #E95420;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        /* Tarjeta de Reconocimiento Moderna */
+        .recognition-card {
+            position: relative;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .recognition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.18);
+        }
+        
+        /* Nuevo borde decorativo animado */
+        .card-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        /* Animación del borde */
+        @keyframes borderPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);
+                opacity: 1;
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+                opacity: 0.8;
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes borderGlow {
+            0% {
+                border-width: 3px;
+                box-shadow: 0 0 10px rgba(var(--border-rgb), 0.5);
+            }
+            50% {
+                border-width: 4px;
+                box-shadow: 0 0 20px rgba(var(--border-rgb), 0.7);
+            }
+            100% {
+                border-width: 3px;
+                box-shadow: 0 0 10px rgba(var(--border-rgb), 0.5);
+            }
+        }
+        
+        .card-inner {
+            position: relative;
+            padding: 40px;
+            z-index: 3;
+        }
+        
+        /* Logo de la empresa */
+        .company-logo {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            width: 200px;
+            height: 80px;
+        }
+        
+        /* Sello distintivo */
+        .badge-container {
+            position: relative;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .badge-container:hover {
+            transform: scale(1.05);
+        }
+        
+        .badge-outer {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .badge-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid;
+            border-color: inherit;
+            padding: 5px;
+        }
+        
+        .badge-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .badge-years {
+            font-size: 32px;
+            line-height: 1;
+            font-weight: bold;
+        }
+        
+        .badge-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-category {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            color: #333;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 2px solid;
+            border-color: inherit;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        /* Contenido del certificado */
+        .card-title {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 700;
+        }
+        
+        .card-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .honoree-name {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: inherit;
+        }
+        
+        .card-message {
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #444;
+        }
+        
+        .signature-area {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .signature {
+            text-align: center;
+            width: 200px;
+        }
+        
+        .signature-line {
+            width: 100%;
+            height: 2px;
+            background-color: #999;
+            margin-bottom: 10px;
+        }
+        
+        .signature-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .signature-title {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .card-date {
+            text-align: center;
+            margin-top: 30px;
+            font-style: italic;
+            color: #666;
+        }
+        
+        .card-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        /* Decoración de fondo */
+        .background-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: 1;
+            opacity: 0.05;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0.8;
+            transform: rotate(45deg);
+        }
+        
+        /* Estilos por categoría */
+        .bronce {
+            color: #8B4513;
+            border-color: #CD7F32;
+            --border-rgb: 205, 127, 50;
+        }
+        
+        .plata {
+            color: #707070;
+            border-color: #C0C0C0;
+            --border-rgb: 192, 192, 192;
+        }
+        
+        .oro {
+            color: #B8860B;
+            border-color: #FFD700;
+            --border-rgb: 255, 215, 0;
+        }
+        
+        .platino {
+            color: #373737;
+            border-color: #E5E4E2;
+            --border-rgb: 229, 228, 226;
+        }
+        
+        .esmeralda {
+            color: #2E8B57;
+            border-color: #50C878;
+            --border-rgb: 80, 200, 120;
+        }
+        
+        .rubi {
+            color: #9B111E;
+            border-color: #E0115F;
+            --border-rgb: 224, 17, 95;
+        }
+        
+        .zafiro {
+            color: #0F52BA;
+            border-color: #0F52BA;
+            --border-rgb: 15, 82, 186;
+        }
+        
+        .diamante {
+            color: #1E90FF;
+            border-color: #B9F2FF;
+            --border-rgb: 185, 242, 255;
+        }
+        
+        .topacio {
+            color: #FF7F50;
+            border-color: #FFC87C;
+            --border-rgb: 255, 200, 124;
+        }
+        
+        .diamante-negro {
+            color: #333;
+            border-color: #2C3E50;
+            --border-rgb: 44, 62, 80;
+        }
+        
+        .amatista {
+            color: #9966CC;
+            border-color: #9966CC;
+            --border-rgb: 153, 102, 204;
+        }
+        
+        .perla-negra {
+            color: #1C2833;
+            border-color: #1C2833;
+            --border-rgb: 28, 40, 51;
+        }
+        
+        .jade-imperial {
+            color: #00A86B;
+            border-color: #00A86B;
+            --border-rgb: 0, 168, 107;
+        }
+        
+        .diamante-rosa {
+            color: #FF69B4;
+            border-color: #FFC0CB;
+            --border-rgb: 255, 192, 203;
+        }
+        
+        .opalo-fuego {
+            color: #FF4500;
+            border-color: #FF8C00;
+            --border-rgb: 255, 140, 0;
+        }
+        
+        /* Estilos del badge por categoría */
+        .badge-outer.bronce { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #8B4513; }
+        .badge-outer.plata { background: linear-gradient(135deg, #E0E0E0, #A0A0A0); color: #333; }
+        .badge-outer.oro { background: linear-gradient(135deg, #FFD700, #B8860B); color: #5D4204; }
+        .badge-outer.platino { background: linear-gradient(135deg, #E5E4E2, #A9A9A9); color: #333; }
+        .badge-outer.esmeralda { background: linear-gradient(135deg, #50C878, #2E8B57); color: #2E8B57; }
+        .badge-outer.rubi { background: linear-gradient(135deg, #E0115F, #9B111E); color: #9B111E; }
+        .badge-outer.zafiro { background: linear-gradient(135deg, #0F52BA, #082E6B); color: #082E6B; }
+        .badge-outer.diamante { background: linear-gradient(135deg, #B9F2FF, #1E90FF); color: #0A3472; }
+        .badge-outer.topacio { background: linear-gradient(135deg, #FFC87C, #FF7F50); color: #B25506; }
+        .badge-outer.diamante-negro { background: linear-gradient(135deg, #2C3E50, #1B2631); color: #1B2631; }
+        .badge-outer.amatista { background: linear-gradient(135deg, #9966CC, #663399); color: #663399; }
+        .badge-outer.perla-negra { background: linear-gradient(135deg, #1C2833, #17202A); color: #17202A; }
+        .badge-outer.jade-imperial { background: linear-gradient(135deg, #00A86B, #004D31); color: #004D31; }
+        .badge-outer.diamante-rosa { background: linear-gradient(135deg, #FFC0CB, #FF69B4); color: #CC3366; }
+        .badge-outer.opalo-fuego { background: linear-gradient(135deg, #FF8C00, #FF4500); color: #FF4500; }
+        
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .card-inner {
+                padding: 30px 20px;
+            }
+            
+            .card-title {
+                font-size: 26px;
+            }
+            
+            .honoree-name {
+                font-size: 24px;
+            }
+            
+            .company-logo {
+                top: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .badge-container {
+                margin-top: 50px;
+            }
+        }
+
+        .badge-gallery {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            z-index: 3;
+        }
+
+        .badge-gallery-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .badge-gallery-img:hover {
+            transform: scale(1.2);
+        }
+
+        @keyframes confettiFall {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(500px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+        .confetti {
+            animation: confettiFall 3s ease-in-out infinite;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ccapture.js/1.1.0/CCapture.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Formulario -->
+        <div class="form-container">
+            <h2 class="form-title">Generador de Reconocimientos</h2>
+            <div class="form-group">
+                <label class="form-label">Nombre del Colaborador</label>
+                <input type="text" id="nombre" class="form-input" placeholder="Ingrese el nombre completo">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Años en la Empresa</label>
+                <input type="number" id="anios" class="form-input" min="1" max="40" placeholder="Ingrese los años de servicio">
+            </div>
+            <div class="action-buttons">
+                <button class="generate-btn" onclick="generarReconocimiento()">Generar Reconocimiento</button>
+        <button class="download-btn" onclick="descargarReconocimiento()">Descargar Certificado</button>
+            </div>
+        </div>
+        
+        <!-- Tarjeta de Reconocimiento -->
+        <div class="recognition-card" id="tarjeta">
+            <!-- Nuevo borde decorativo -->
+            <div class="card-border" id="borde-decorativo"></div>
+            
+            <div class="card-inner">
+                <!-- Logo de la empresa -->
+                <div class="company-logo" id="logo-empresa"><img src="img/mentora.png" alt="Logo de la empresa" style="width: 100%; height: 100%; object-fit: contain;"></div>
+                
+                <!-- Emblema similar a la imagen adjunta -->
+                <div class="badge-container">
+                    <div class="badge-outer" id="badge-exterior">
+                        <div class="badge-inner">
+                            <div class="badge-icon">
+                                <span id="badge-icon-text">&#128293;</span>
+                            </div>
+                            <div class="badge-years" id="anios-badge">3</div>
+                            <div class="badge-title">AÑOS</div>
+                        </div>
+                    </div>
+                    <div class="badge-category" id="categoria-badge">Oro</div>
+                </div>
+                
+                <h1 class="card-title">¡Felicidades por tu Trayectoria!</h1>
+                <p class="card-subtitle">Reconocemos tu dedicación y compromiso</p>
+                
+                <h2 class="honoree-name" id="nombre-completo">Nombre del Colaborador</h2>
+                
+                <div class="card-message" id="mensaje">
+                    Texto que cambia según la cantidad de años.
+                </div>
+                
+                <div class="signature-area">
+                    <div class="signature">
+                        <div class="signature-line"></div>
+                        <div class="signature-name">Octavio Morán</div>
+                        <div class="signature-title">Director General</div>
+                    </div>
+                </div>
+                
+                <div class="card-date" id="fecha"></div>
+                
+                <div class="card-footer">
+                    Gracias por ser parte de nuestro equipo y contribuir a nuestro éxito
+                </div>
+
+                <div class="badge-gallery" id="badge-gallery-dinamico"></div>
+            </div>
+            
+            <!-- Decoración de fondo -->
+            <div class="background-decoration" id="decoracion-fondo"></div>
+        </div>
+    </div>
+    
+    <!-- Incluir html2canvas para la exportación -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        // Obtener fecha actual formateada
+        function obtenerFechaFormateada() {
+            const meses = [
+                "enero", "febrero", "marzo", "abril", "mayo", "junio", 
+                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+            ];
+            const fecha = new Date();
+            return `${fecha.getDate()} de ${meses[fecha.getMonth()]} de ${fecha.getFullYear()}`;
+        }
+        
+        // Determinar categoría según años
+        function determinarCategoria(anios) {
+            if (anios >= 40) return { nombre: "Ópalo de Fuego", clase: "opalo-fuego", imagen: "opalo-fuego.png"  };
+            if (anios >= 30) return { nombre: "Diamante Rosa", clase: "diamante-rosa", imagen: "diamante-rosa.png" };
+            if (anios >= 25) return { nombre: "Jade Imperial", clase: "jade-imperial", imagen: "jade-imperial.png" };
+            if (anios >= 20) return { nombre: "Perla Negra", clase: "perla-negra", imagen: "perla-negra.png"  };
+            if (anios >= 15) return { nombre: "Amatista", clase: "amatista", imagen: "amatista.png"};
+            if (anios >= 10) return { nombre: "Diamante Negro", clase: "diamante-negro", imagen: "diamante-negro.png"  };
+            if (anios == 9) return { nombre: "Topacio", clase: "topacio", imagen: "topacio.png" };
+            if (anios == 8) return { nombre: "Diamante", clase: "diamante", imagen: "diamante.png"  };
+            if (anios == 7) return { nombre: "Zafiro", clase: "zafiro", imagen: "zafiro.png" };
+            if (anios == 6) return { nombre: "Rubí", clase: "rubi", imagen: "rubi.png" };
+            if (anios == 5) return { nombre: "Esmeralda", clase: "esmeralda", imagen: "esmeralda.png" };
+            if (anios == 4) return { nombre: "Platino", clase: "platino", imagen: "platino.png" };
+            if (anios == 3) return { nombre: "Oro", clase: "oro", imagen: "oro.png"};
+            if (anios == 2) return { nombre: "Plata", clase: "plata", imagen: "plata.png"};
+            return { nombre: "Bronce", clase: "bronce", imagen: "bronce.png"};
+        }
+        
+        // Generar mensaje según años
+        function generarMensaje(nombre, anios, categoria) {
+        const mensajesPorCategoria = {
+            "Bronce": `¡Felicidades ${nombre} por tus primeros ${anios} años con nosotros! Has demostrado energía, compromiso y un gran comienzo. El bronce representa la base sólida de una trayectoria prometedora, al igual que tú construyes los cimientos de grandes aportes futuros.`,
+
+            "Plata": `¡${nombre}, tus ${anios} años con nosotros brillan como la plata! Esta piedra refleja pureza y claridad, al igual que tu trabajo honesto y comprometido. Gracias por fortalecer nuestro equipo.`,
+
+            "Oro": `¡${nombre}, tus ${anios} años son de oro puro! Así como el oro es símbolo de valor, tu entrega y constancia iluminan nuestros logros. ¡Gracias por tu excelencia!`,
+
+            "Platino": `¡${nombre}, alcanzar los ${anios} años es como portar platino! Esta piedra es símbolo de exclusividad y resistencia, al igual que tu aporte único y constante a nuestra organización.`,
+
+            "Esmeralda": `¡${nombre}, ${anios} años de brillante compromiso! La esmeralda simboliza renovación y crecimiento, justo como tú impulsas con tu energía y frescura cada proyecto en el que participas.`,
+
+            "Rubí": `¡${nombre}, tus ${anios} años reflejan pasión y determinación! El rubí es símbolo de fuerza interior y liderazgo, cualidades que has demostrado con creces. ¡Gracias por inspirarnos!`,
+
+            "Zafiro": `¡${nombre}, como el zafiro, tus ${anios} años representan sabiduría y honestidad! Tu serenidad y firmeza fortalecen el alma de nuestro equipo. ¡Gracias por tu integridad y ejemplo!`,
+
+            "Diamante": `¡${nombre}, tus ${anios} años brillan como un diamante! Esta piedra es símbolo de excelencia, claridad y perseverancia, valores que vives cada día. ¡Gracias por tu brillante trayectoria!`,
+
+            "Topacio": `¡${nombre}, felicidades por estos ${anios} años llenos de creatividad! El topacio simboliza alegría, comunicación y equilibrio, reflejo de lo que aportas al clima laboral. ¡Eres esencial!`,
+
+            "Diamante Negro": `¡${nombre}, tus ${anios} años son tan sólidos y únicos como un diamante negro! Tu constancia, profesionalismo y visión aportan un valor incalculable a nuestra misión.`,
+
+            "Amatista": `¡${nombre}, tus ${anios} años reflejan madurez y espiritualidad! La amatista representa sabiduría y templanza, virtudes que transmites en cada tarea. ¡Gracias por tu inspiración!`,
+
+            "Perla Negra": `¡${nombre}, alcanzar los ${anios} años te convierte en una joya rara como la perla negra. Tu valor está en tu autenticidad, resiliencia y el impacto positivo que dejas a tu paso.`,
+
+            "Jade Imperial": `¡${nombre}, con ${anios} años, te destacas por tu compromiso duradero! El jade simboliza armonía, equilibrio y protección, cualidades que encarnas y compartes con todos.`,
+
+            "Diamante Rosa": `¡${nombre}, tus ${anios} años reflejan empatía, sensibilidad y liderazgo emocional. Como el diamante rosa, tu luz transforma e inspira a quienes te rodean.`,
+
+            "Ópalo de Fuego": `¡${nombre}, eres fuego puro tras ${anios} años! Esta piedra expresa creatividad, pasión y poder interior. Gracias por guiar con energía y visión extraordinaria nuestro camino.`
+        };
+
+        return mensajesPorCategoria[categoria] || `¡${nombre}, gracias por tus ${anios} años de compromiso! Tu aporte ha sido valioso para nuestra misión.`;
+    }
+        
+        // Crear decoración de fondo
+        function crearDecoracionFondo(categoriaClase) {
+            const decoracion = document.getElementById('decoracion-fondo');
+            decoracion.innerHTML = '';
+            
+            const colores = obtenerColoresCategoria(categoriaClase);
+            
+            // Crear confeti
+            for (let i = 0; i < 30; i++) {
+                const confeti = document.createElement('div');
+                confeti.className = 'confetti';
+                confeti.style.left = `${Math.random() * 100}%`;
+                confeti.style.top = `${Math.random() * 100}%`;
+                confeti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+                confeti.style.width = `${5 + Math.random() * 10}px`;
+                confeti.style.height = `${5 + Math.random() * 10}px`;
+                confeti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                decoracion.appendChild(confeti);
+            }
+        }
+        
+        // Obtener colores según categoría para la decoración
+        function obtenerColoresCategoria(categoriaClase) {
+            const coloresBase = {
+                'bronce': ['#CD7F32', '#8B4513', '#D2691E', '#A0522D'],
+                'plata': ['#C0C0C0', '#A9A9A9', '#D3D3D3', '#808080'],
+                'oro': ['#FFD700', '#DAA520', '#B8860B', '#FFC125'],
+                'platino': ['#E5E4E2', '#C0C0C0', '#A9A9A9', '#D3D3D3'],
+                'esmeralda': ['#50C878', '#3CB371', '#2E8B57', '#00A86B'],
+                'rubi': ['#E0115F', '#CC0033', '#9B111E', '#B22222'],
+                'zafiro': ['#0F52BA', '#0000CD', '#4169E1', '#000080'],
+                'diamante': ['#B9F2FF', '#87CEEB', '#1E90FF', '#6495ED'],
+                'topacio': ['#FFC87C', '#FFCC99', '#FF7F50', '#FFA07A'],
+                'diamante-negro': ['#2C3E50', '#34495E', '#1B2631', '#283747'],
+                'amatista': ['#9966CC', '#8A2BE2', '#9370DB', '#7B68EE'],
+                'perla-negra': ['#1C2833', '#212F3D', '#17202A', '#283747'],
+                'jade-imperial': ['#00A86B', '#009B77', '#00A572', '#00856A'],
+                'diamante-rosa': ['#FFC0CB', '#FFB6C1', '#FF69B4', '#FF91A4'],
+                'opalo-fuego': ['#FF8C00', '#FF4500', '#FF7F50', '#FF6347']
+            };
+            
+            return coloresBase[categoriaClase] || ['#333', '#666', '#999', '#CCC'];
+        }
+        
+        // Función para aplicar el borde decorativo según la categoría
+        function aplicarBordeDecorativo(categoriaClase) {
+            const borde = document.getElementById('borde-decorativo');
+            const categoria = obtenerEstiloCategoria(categoriaClase);
+            
+            // Aplicar estilos al borde
+            borde.style.border = `4px solid ${categoria.borderColor}`;
+            borde.style.animation = 'borderGlow 2s infinite';
+            borde.style.boxShadow = `0 0 15px ${categoria.borderColor}`;
+        }
+        
+        // Obtener estilos específicos según la categoría
+        function obtenerEstiloCategoria(categoriaClase) {
+            const estilos = {
+                'bronce': { borderColor: '#CD7F32' },
+                'plata': { borderColor: '#C0C0C0' },
+                'oro': { borderColor: '#FFD700' },
+                'platino': { borderColor: '#E5E4E2' },
+                'esmeralda': { borderColor: '#50C878' },
+                'rubi': { borderColor: '#E0115F' },
+                'zafiro': { borderColor: '#0F52BA' },
+                'diamante': { borderColor: '#B9F2FF' },
+                'topacio': { borderColor: '#FFC87C' },
+                'diamante-negro': { borderColor: '#2C3E50' },
+                'amatista': { borderColor: '#9966CC' },
+                'perla-negra': { borderColor: '#1C2833' },
+                'jade-imperial': { borderColor: '#00A86B' },
+                'diamante-rosa': { borderColor: '#FFC0CB' },
+                'opalo-fuego': { borderColor: '#FF8C00' }
+            };
+            
+            return estilos[categoriaClase] || { borderColor: '#333' };
+        }
+        
+        // Función para descargar el reconocimiento como imagen
+        function descargarReconocimiento() {
+            const tarjeta = document.getElementById('tarjeta');
+            
+            // Usar html2canvas para convertir la tarjeta a imagen
+            html2canvas(tarjeta, {
+                scale: 2, // Mejor calidad
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null
+            }).then(canvas => {
+                // Crear enlace de descarga
+                const enlace = document.createElement('a');
+                enlace.download = 'Reconocimiento.png';
+                enlace.href = canvas.toDataURL('image/png');
+                                // Forzar descarga
+                                enlace.click();
+            });
+        }
+
+        // Función principal para generar el reconocimiento
+        function generarReconocimiento() {
+            const nombre = (document.getElementById('nombre').value || "Nombre del Colaborador").trim();
+            const anios = parseInt(document.getElementById('anios').value) || 3;
+            if (!nombre || isNaN(anios) || anios < 1) {
+                alert("Por favor, ingresa un nombre válido y una cantidad de años mayor o igual a 1.");
+                return;
+            }
+
+            const categoria = determinarCategoria(anios);
+            const tarjeta = document.getElementById('tarjeta');
+            const badgeExterior = document.getElementById('badge-exterior');
+            const badgeIcon = document.getElementById('badge-icon-text');
+
+            // Reiniciar y aplicar clases
+            tarjeta.className = "recognition-card " + categoria.clase;
+            badgeExterior.className = "badge-outer " + categoria.clase;
+            document.getElementById('categoria-badge').className = "badge-category " + categoria.clase;
+            document.getElementById('nombre-completo').className = "honoree-name " + categoria.clase;
+
+            // Asignar valores
+            badgeIcon.innerHTML = categoria.imagen
+                ? `<img src="img/${categoria.imagen}" alt="${categoria.nombre}" width="30" height="30" style="object-fit: contain;">`
+                : categoria.icono;
+            const badgeGaleria = document.getElementById('badge-gallery-dinamico');
+            badgeGaleria.innerHTML = categoria.imagen
+                ? `<img src="img/badge/${categoria.imagen}" alt="Badge ${categoria.nombre}" title="${categoria.nombre}" class="badge-gallery-img">`
+                : '';
+            document.getElementById('anios-badge').textContent = anios;
+            document.getElementById('categoria-badge').textContent = categoria.nombre;
+            document.getElementById('nombre-completo').textContent = nombre;
+            document.getElementById('mensaje').textContent = generarMensaje(nombre, anios, categoria.nombre);
+            document.getElementById('fecha').textContent = obtenerFechaFormateada();
+
+            crearDecoracionFondo(categoria.clase);
+            aplicarBordeDecorativo(categoria.clase);
+                }
+
+    </script>
+</body>
+</html>
