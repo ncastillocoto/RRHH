@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Net Promoter Score</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .nps-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      padding: 30px;
+      text-align: center;
+      position: relative;
+      color: white;
+    }
+
+    .logo-container {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      width: 160px;
+      height: 100px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9em;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .character-container {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .nps-title {
+      font-size: 2.8em;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin: 20px 0;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      font-size: 1.2em;
+      font-weight: 300;
+      opacity: 0.9;
+      margin-bottom: 10px;
+    }
+
+    .main-content {
+      padding: 40px;
+    }
+
+    .question-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .question {
+      font-size: 1.4em;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .question-subtitle {
+      color: #7f8c8d;
+      font-size: 1em;
+    }
+
+    .score-faces {
+      display: flex;
+      justify-content: center;
+      margin: 40px 0;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .face-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 5px;
+      transition: transform 0.3s ease;
+    }
+
+    .face-score:hover {
+      transform: translateY(-5px);
+    }
+
+    .face {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2em;
+      margin-bottom: 10px;
+      position: relative;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .face:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Colores del semáforo */
+    .face.detractor {
+      background: #dc3545; /* Rojo */
+      color: white;
+    }
+
+    .face.passive {
+      background: #ffc107; /* Amarillo */
+      color: #2c3e50;
+    }
+
+    .face.promoter {
+      background: #28a745; /* Verde */
+      color: white;
+    }
+
+    .face-count {
+      background: #6c757d;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 1em;
+      font-weight: 600;
+      min-width: 35px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .score-scale {
+      display: flex;
+      justify-content: center;
+      margin: 40px 0;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .scale-number {
+      width: 55px;
+      height: 55px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.3em;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .scale-number:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .scale-number.detractor {
+      background: #dc3545;
+      color: white;
+    }
+
+    .scale-number.passive {
+      background: #ffc107;
+      color: #2c3e50;
+    }
+
+    .scale-number.promoter {
+      background: #28a745;
+      color: white;
+    }
+
+    .category-labels {
+      display: flex;
+      justify-content: space-around;
+      margin: 30px 0;
+      padding: 0 50px;
+    }
+
+    .category-label {
+      font-weight: 700;
+      font-size: 1.1em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 12px 24px;
+      border-radius: 25px;
+      color: white;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .category-label.detractors {
+      background: #dc3545;
+    }
+
+    .category-label.passives {
+      background: #ffc107;
+      color: #2c3e50;
+      text-shadow: none;
+    }
+
+    .category-label.promoters {
+      background: #28a745;
+    }
+
+    .nps-formula {
+      font-size: 2em;
+      font-weight: 700;
+      margin: 50px 0;
+      text-align: center;
+      color: #2c3e50;
+      padding: 25px;
+      background: #f8f9fa;
+      border-radius: 20px;
+      border: 2px solid #e9ecef;
+    }
+
+    .formula-green {
+      color: #28a745;
+      text-shadow: 0 2px 5px rgba(40, 167, 69, 0.3);
+    }
+
+    .formula-red {
+      color: #dc3545;
+      text-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+    }
+
+    .results-section {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 50px 0;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .nps-circle {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #28a745 0deg 277deg,
+        #ffc107 277deg 338deg,
+        #dc3545 338deg 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      animation: rotate 3s ease-in-out;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .nps-circle::before {
+      content: '';
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      z-index: 1;
+      box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .nps-value {
+      position: relative;
+      z-index: 2;
+      font-size: 3.5em;
+      font-weight: 700;
+      color: #2c3e50;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .breakdown-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border: 2px solid #f8f9fa;
+    }
+
+    .breakdown-item:hover {
+      transform: translateX(10px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .breakdown-label {
+      color: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      min-width: 120px;
+      text-align: center;
+      text-transform: capitalize;
+      font-size: 1.1em;
+    }
+
+    .breakdown-label.detractor-label {
+      background: #dc3545;
+    }
+
+    .breakdown-label.passive-label {
+      background: #ffc107;
+      color: #2c3e50;
+    }
+
+    .breakdown-label.promoter-label {
+      background: #28a745;
+    }
+
+    .breakdown-count {
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.3em;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .breakdown-count.detractor-count {
+      background: #dc3545;
+    }
+
+    .breakdown-count.passive-count {
+      background: #ffc107;
+      color: #2c3e50;
+    }
+
+    .breakdown-count.promoter-count {
+      background: #28a745;
+    }
+
+    .breakdown-percentage {
+      background: #6c757d;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 1.1em;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .total-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      padding: 20px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 2px solid #f8f9fa;
+    }
+
+    .total-label {
+      background: #2c3e50;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .total-count {
+      background: #6c757d;
+      color: white;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.8em;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .testimonials-section {
+      margin: 50px 0;
+      padding: 30px;
+      background: #f8f9fa;
+      border-radius: 20px;
+      border: 2px solid #e9ecef;
+    }
+
+    .testimonials-title {
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    .slider-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 15px;
+      height: 250px;
+      background: white;
+    }
+
+    .slider {
+      display: flex;
+      width: 800%;
+      height: 100%;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .testimonial-card {
+      width: 12.5%;
+      flex-shrink: 0;
+      padding: 30px 20px;
+      background: white;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    .testimonial-score {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: #28a745;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2em;
+      box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+    }
+
+    .testimonial-comment {
+      font-size: 1.1em;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-style: italic;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .testimonial-author {
+      font-weight: 600;
+      color: #28a745;
+      font-size: 1em;
+      margin-bottom: 5px;
+    }
+
+    .testimonial-institution {
+      color: #6c757d;
+      font-size: 0.85em;
+      margin-bottom: 8px;
+    }
+
+    .testimonial-country {
+      font-size: 1.1em;
+    }
+
+    .slider-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      gap: 15px;
+    }
+
+    .slider-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.5em;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slider-btn:hover:not(:disabled) {
+      background: #218838;
+      transform: scale(1.1);
+    }
+
+    .slider-btn:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+      transform: none;
+      opacity: 0.5;
+    }
+
+    .slider-indicators {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 20px;
+      gap: 8px;
+    }
+
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #dee2e6;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+      background: #28a745;
+      transform: scale(1.3);
+    }
+
+    .indicator:hover {
+      background: #28a745;
+      opacity: 0.7;
+    }
+
+    .footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .score-faces {
+        gap: 8px;
+      }
+      
+      .face {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5em;
+      }
+      
+      .results-section {
+        flex-direction: column;
+      }
+      
+      .category-labels {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="nps-container">
+    <div class="header">
+      <div class="character-container">
+        <img src="https://media-mia5-1.cdn.whatsapp.net/v/t61.24694-24/394285865_1390021265285868_6098697493584065648_n.jpg?ccb=11-4&oh=01_Q5Aa1wGGt9g4Wk_WB1xJVJEGsAz9m0hGf-eMRk3ctEZ18TMbPw&oe=6856F641&_nc_sid=5e03e0&_nc_cat=100" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <div class="logo-container">
+        <img src="https://www.grupomentora.com/progrentis/wp-content/uploads/2023/11/logo-footer.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+      </div>
+      <div class="subtitle">Encuesta de Satisfacción</div><br><br><br>
+    </div>
+
+    <div class="main-content">
+      <div class="question-section">
+        <div class="question">¿Qué tan probable es que recomiendes nuestro servicio?</div>
+        <div class="question-subtitle">Del 0 al 10, donde 0 es "Para nada probable" y 10 es "Extremadamente probable"</div>
+      </div>
+
+      <div class="score-faces">
+        <div class="face-score">
+          <div class="face detractor">😡</div>
+          <div class="face-count">0</div>
+        </div>
+        <div class="face-score">
+          <div class="face detractor">😠</div>
+          <div class="face-count">0</div>
+        </div>
+        <div class="face-score">
+          <div class="face detractor">😒</div>
+          <div class="face-count">1</div>
+        </div>
+        <div class="face-score">
+          <div class="face detractor">😕</div>
+          <div class="face-count">0</div>
+        </div>
+        <div class="face-score">
+          <div class="face detractor">😞</div>
+          <div class="face-count">2</div>
+        </div>
+        <div class="face-score">
+          <div class="face detractor">☹️</div>
+          <div class="face-count">1</div>
+        </div>
+        <div class="face-score">
+          <div class="face passive">😐</div>
+          <div class="face-count">2</div>
+        </div>
+        <div class="face-score">
+          <div class="face passive">🙂</div>
+          <div class="face-count">9</div>
+        </div>
+        <div class="face-score">
+          <div class="face promoter">😊</div>
+          <div class="face-count">10</div>
+        </div>
+        <div class="face-score">
+          <div class="face promoter">🤩</div>
+          <div class="face-count">40</div>
+        </div>
+      </div>
+
+      <div class="score-scale">
+        <div class="scale-number detractor">1</div>
+        <div class="scale-number detractor">2</div>
+        <div class="scale-number detractor">3</div>
+        <div class="scale-number detractor">4</div>
+        <div class="scale-number detractor">5</div>
+        <div class="scale-number detractor">6</div>
+        <div class="scale-number passive">7</div>
+        <div class="scale-number passive">8</div>
+        <div class="scale-number promoter">9</div>
+        <div class="scale-number promoter">10</div>
+      </div>
+
+      <div class="category-labels">
+        <div class="category-label detractors">Detractores</div>
+        <div class="category-label passives">Pasivos</div>
+        <div class="category-label promoters">Promotores</div>
+      </div>
+
+      <div class="nps-formula">
+        NPS = <span class="formula-green">% PROMOTORES</span> - <span class="formula-red">% DETRACTORES</span>
+      </div>
+
+      <div class="results-section">
+        <div class="nps-circle">
+          <div class="nps-value">71</div>
+        </div>
+
+        <div class="breakdown">
+          <div class="breakdown-item">
+            <div class="breakdown-label detractor-label">Detractores</div>
+            <div class="breakdown-count detractor-count">4</div>
+            <div class="breakdown-percentage">6.2%</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-label passive-label">Pasivos</div>
+            <div class="breakdown-count passive-count">11</div>
+            <div class="breakdown-percentage">16.9%</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="breakdown-label promoter-label">Promotores</div>
+            <div class="breakdown-count promoter-count">50</div>
+            <div class="breakdown-percentage">76.9%</div>
+          </div>
+        </div>
+
+        <div class="total-section">
+          <div class="total-label">Total</div>
+          <div class="total-count">65</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonials-section">
+      <div class="testimonials-title">💬 Comentarios de Nuestros Promotores</div>
+      <div class="slider-indicators" id="indicators"></div><br><br>
+
+      <div class="slider-container">
+        <div class="slider" id="testimonialSlider">
+          <div class="testimonial-card">
+            <div class="testimonial-score">10</div>
+            <div class="testimonial-comment">"Tiempo de respuesta muy rápido."</div>
+            <div class="testimonial-author">Judith Alcántara</div>
+            <div class="testimonial-institution">Colegio Cardenal Sancha</div>
+            <div class="testimonial-country">República Dominicana 🇩🇴</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-score">10</div>
+            <div class="testimonial-comment">"Su servicio es eficiente"</div>
+            <div class="testimonial-author">Iliana Karina Vázquez Lozano</div>
+            <div class="testimonial-institution">Creativos Cancún</div>
+            <div class="testimonial-country">México 🇲🇽</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-score">10</div>
+            <div class="testimonial-comment">"Soluciones inmediatas, excelente"</div>
+            <div class="testimonial-author">Marielys Guédez</div>
+            <div class="testimonial-institution">Colegio San Agustín de Panamá</div>
+            <div class="testimonial-country">Panamá 🇵🇦</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-score">10</div>
+            <div class="testimonial-comment">"Las respuestas son rápidas y oportunas."</div>
+            <div class="testimonial-author">Karen Angulo Salas</div>
+            <div class="testimonial-institution">Centro Educativo San Francisco de Asís</div>
+            <div class="testimonial-country">Costa Rica 🇨🇷</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-score">9</div>
+            <div class="testimonial-comment">"Ha habido el apoyo requerido por la Institución"</div>
+            <div class="testimonial-author">Clara Novelo</div>
+            <div class="testimonial-institution">Jenaro Rodríguez Correa</div>
+            <div class="testimonial-country">México 🇲🇽</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-score">10</div>
+            <div class="testimonial-comment">"Fueron muy acertadas sus observaciones"</div>
+            <div class="testimonial-author">María de la Luz Noh Castillo</div>
+            <div class="testimonial-institution">Instituto Alina</div>
+            <div class="testimonial-country">México 🇲🇽</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-score">10</div>
+            <div class="testimonial-comment">"Excelente trabajo"</div>
+            <div class="testimonial-author">Rosenny Dominga Javier Brito</div>
+            <div class="testimonial-institution">La Milagrosa</div>
+            <div class="testimonial-country">República Dominicana 🇩🇴</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-score">10</div>
+            <div class="testimonial-comment">"Excelente servicio"</div>
+            <div class="testimonial-author">MARIANNI GARCÍA</div>
+            <div class="testimonial-institution">American Christian School</div>
+            <div class="testimonial-country">República Dominicana 🇩🇴</div>
+          </div>
+        </div>
+      </div>
+      <div class="slider-controls">
+        <button class="slider-btn" id="prevBtn" onclick="changeSlide(-1)">‹</button>
+        <button class="slider-btn" id="nextBtn" onclick="changeSlide(1)">›</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      Dashboard de Net Promoter Score • Generado automáticamente
+    </div>
+  </div>
+
+  
+</body>
+
+<script>
+    let currentSlide = 0;
+    const totalSlides = 8;
+
+    function initializeSlider() {
+      const indicators = document.getElementById('indicators');
+      indicators.innerHTML = '';
+      for (let i = 0; i < totalSlides; i++) {
+        const indicator = document.createElement('span');
+        indicator.className = 'indicator';
+        if (i === 0) indicator.classList.add('active');
+        indicator.onclick = () => goToSlide(i);
+        indicators.appendChild(indicator);
+      }
+      updateSlider();
+    }
+
+    function updateSlider() {
+      const slider = document.getElementById('testimonialSlider');
+      const indicators = document.querySelectorAll('.indicator');
+      
+      if (slider && indicators.length > 0) {
+        slider.style.transform = `translateX(-${currentSlide * 12.5}%)`;
+        
+        indicators.forEach((indicator, index) => {
+          indicator.classList.toggle('active', index === currentSlide);
+        });
+        
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        if (prevBtn) prevBtn.disabled = currentSlide === 0;
+        if (nextBtn) nextBtn.disabled = currentSlide === totalSlides - 1;
+      }
+    }
+
+    function changeSlide(direction) {
+      const newSlide = currentSlide + direction;
+      if (newSlide >= 0 && newSlide < totalSlides) {
+        currentSlide = newSlide;
+        updateSlider();
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlider();
+      }
+    }
+
+    function autoSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+      } else {
+        currentSlide = 0;
+      }
+      updateSlider();
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        initializeSlider();
+        // Auto-slide every 4 seconds
+        setInterval(autoSlide, 4000);
+      }, 500);
+    });
+
+    // Add global functions for onclick events
+    window.changeSlide = changeSlide;
+    window.goToSlide = goToSlide;
+  </script>
+</html>
